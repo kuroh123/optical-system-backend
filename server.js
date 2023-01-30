@@ -7,7 +7,8 @@ dotenv.config();
 
 const app = express();
 
-const port = process.env.PORT || 5000;
+const port =
+  process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 5000;
 
 app.use(express.json());
 // app.use(bodyParser.json({ limit: "30mb", extended: true }));
