@@ -6,9 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-
-const port =
-  process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 5000;
+const port = 3000;
 
 app.use(express.json());
 // app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -30,5 +28,5 @@ app.use("/api/", userRoutes);
 app.use("/api/patients", patientRoutes);
 
 app.listen(port, () => {
-  console.log(`server is running on port: ${port}`);
+  console.log(`server is running`);
 });
