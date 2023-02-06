@@ -10,12 +10,23 @@ export const patients = async (req, res) => {
 };
 
 export const createPatient = async (req, res) => {
-  const { first_name, last_name, mobile, address, age, gender } = req.body;
+  const {
+    first_name,
+    last_name,
+    mobile,
+    address,
+    age,
+    gender,
+    examined_by,
+    dob,
+  } = req.body;
   const newPatient = new Patient({
     first_name,
     last_name,
     mobile,
     address,
+    examined_by,
+    dob,
     age,
     gender,
   });

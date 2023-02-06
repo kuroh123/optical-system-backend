@@ -7,8 +7,10 @@ const patientSchema = new Schema(
     last_name: String,
     mobile: Number,
     address: String,
+    dob: Date,
     age: Number,
     gender: String,
+    examined_by: String,
   },
   { timestamp: true }
 );
