@@ -11,6 +11,7 @@ const patientSchema = new Schema(
     age: Number,
     gender: String,
     examined_by: String,
+    created_at: { type: Date, required: true, default: Date.now },
   },
   { timestamp: true }
 );

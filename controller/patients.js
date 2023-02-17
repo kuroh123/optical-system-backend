@@ -10,30 +10,40 @@ export const patients = async (req, res) => {
 };
 
 export const createPatient = async (req, res) => {
-  const {
-    first_name,
-    last_name,
-    mobile,
-    address,
-    age,
-    gender,
-    examined_by,
-    dob,
-  } = req.body;
-  const newPatient = new Patient({
-    first_name,
-    last_name,
-    mobile,
-    address,
-    examined_by,
-    dob,
-    age,
-    gender,
-  });
+  const newPatient = new Patient({ ...req.body });
   try {
     await newPatient.save();
     res.status(201).json(newPatient);
   } catch (e) {
     res.status(409).json({ message: e.message });
   }
+};
+
+export const fetchPatient = async (req, res) => {
+  const fetchedPatient = await Patient.findById(req.params.id);
+  try {
+    if (fetchedPatient) {
+      res.status(200).json(fetchedPatient);
+    }
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const updatePatient = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedPatient = await Patient.findByIdAndUpdate(id, { ...req.body });
+    // await updatedPatient.save();
+    res.status(201).json(updatedPatient);
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const deletePatient = async (req, res) => {
+  const { id } = req.params;
+  const patient = await Patient.findByIdAndDelete(id);
+  res.send(true);
 };

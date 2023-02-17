@@ -23,9 +23,11 @@ connection.once("open", () => {
 
 import userRoutes from "./routes/users.js";
 import patientRoutes from "./routes/patients.js";
+import patientRequestRoutes from "./routes/patientRequest.js";
 
 app.use("/api/", userRoutes);
 app.use("/api/patients", patientRoutes);
+app.use("/api/patientrequest", patientRequestRoutes);
 
 app.listen(port, () => {
   console.log(`server is running`);
