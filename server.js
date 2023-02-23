@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true });
+mongoose.connect(uri, { useNewUrlParser: true, dbName: "test" });
 mongoose.set("strictQuery", true);
 const connection = mongoose.connection;
 connection.once("open", () => {
@@ -22,12 +22,16 @@ connection.once("open", () => {
 });
 
 import userRoutes from "./routes/users.js";
+import dashboardRoutes from "./routes/dashboard.js";
 import patientRoutes from "./routes/patients.js";
 import patientRequestRoutes from "./routes/patientRequest.js";
+import billingRoutes from "./routes/billing.js";
 
 app.use("/api/", userRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/patientrequest", patientRequestRoutes);
+app.use("/api/billing", billingRoutes);
 
 app.listen(port, () => {
   console.log(`server is running`);

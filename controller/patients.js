@@ -1,8 +1,16 @@
+import moment from "moment/moment.js";
 import Patient from "../models/patient.model.js";
 
 export const patients = async (req, res) => {
+  const startDate = req.query.startDate.split(" ");
+  const endDate = req.query.endDate.split(" ");
   try {
-    const patients = await Patient.find({});
+    const patients = await Patient.find({
+      created_at: {
+        $gte: startDate[0],
+        $lte: endDate[0],
+      },
+    });
     res.status(200).json(patients);
   } catch (e) {
     res.status(404).json({ message: e.message });
@@ -44,6 +52,8 @@ export const updatePatient = async (req, res) => {
 
 export const deletePatient = async (req, res) => {
   const { id } = req.params;
-  const patient = await Patient.findByIdAndDelete(id);
+  const patient = await Patient.findById(id);
+  await Patient.deleteOne(patient);
+  // const patient = await Patient.remove(id);
   res.send(true);
 };

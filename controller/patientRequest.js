@@ -1,8 +1,11 @@
 import PatientRequest from "../models/patientRequest.model.js";
 
 export const patientRequests = async (req, res) => {
+  const patient = req.query.patient;
   try {
-    const patientRequests = await PatientRequest.find({}).populate({
+    const patientRequests = await PatientRequest.find({
+      patient: patient,
+    }).populate({
       path: "patient",
     });
     res.status(200).json(patientRequests);
