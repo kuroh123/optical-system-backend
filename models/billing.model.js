@@ -16,7 +16,6 @@ const billingSchema = new Schema(
     frame_type: String,
     frame_price: String,
     other_items: [Object],
-    bill_remarks: String,
     extra_charges: Number,
     vat: {
       type: Number,
@@ -41,15 +40,6 @@ const billingSchema = new Schema(
 
 billingSchema.plugin(AutoIncrement, { inc_field: "bill_no" });
 
-// billingSchema.virtual("current_payment_status").get(function () {
-//   if (this.paid_amount === 0) {
-//     return "pending";
-//   } else if (this.paid_amount < this.total_amount) {
-//     return "partially_paid";
-//   } else {
-//     return "paid";
-//   }
-// });
 const Billing = mongoose.model("Billing", billingSchema);
 
 export default Billing;

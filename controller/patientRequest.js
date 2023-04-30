@@ -15,7 +15,6 @@ export const patientRequests = async (req, res) => {
 };
 
 export const createPatientRequest = async (req, res) => {
-  console.log(req.body);
   const newPatientRequest = new PatientRequest({ ...req.body });
   try {
     await newPatientRequest.save();

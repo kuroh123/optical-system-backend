@@ -6,7 +6,6 @@ const AutoIncrement = AutoIncrementFactory(mongoose.connection);
 
 const patientRequestSchema = new Schema(
   {
-    prescription_remarks: String,
     right_eye: {
       spherical: String,
       cylindrical: String,

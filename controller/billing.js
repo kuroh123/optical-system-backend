@@ -1,6 +1,6 @@
 import Billing from "../models/billing.model.js";
 
-export const fetchbilling = async (req, res) => {
+export const fetchBillings = async (req, res) => {
   const startDate = req.query.startDate.split(" ");
   const endDate = req.query.endDate.split(" ");
   try {
@@ -19,7 +19,6 @@ export const fetchbilling = async (req, res) => {
 };
 
 export const createBilling = async (req, res) => {
-  console.log(req.body);
   const newBilling = new Billing({ ...req.body });
   try {
     await newBilling.save();
@@ -37,24 +36,32 @@ export const createBilling = async (req, res) => {
   }
 };
 
-// export const fetchPatient = async (req, res) => {
-//   const fetchedPatient = await Patient.findById(req.params.id);
-//   try {
-//     if (fetchedPatient) {
-//       res.status(200).json(fetchedPatient);
-//     }
-//   } catch (e) {
-//     res.status(409).json({ message: e.message });
-//   }
-// };
+export const fetchBilling = async (req, res) => {
+  const fetchedBilling = await Billing.findById(req.params.id);
+  try {
+    if (fetchedBilling) {
+      res.status(200).json(fetchedBilling);
+    }
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
 
-export const findPatientReq = async (req, res) => {
+export const updateBilling = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const foundReq = await PatientRequest.findById(id).populate("patient_data");
+    const updatedBilling = await Billing.findByIdAndUpdate(id, { ...req.body });
     // await updatedPatient.save();
-    res.status(201).json(foundReq);
+    if (updatedBilling.paid_amount === 0) {
+      updatedBilling.payment_status = "pending";
+    } else if (updatedBilling.paid_amount < updatedBilling.total_amount) {
+      updatedBilling.payment_status = "partially_paid";
+    } else {
+      updatedBilling.payment_status = "paid";
+    }
+    await updatedBilling.save();
+    res.status(201).json(updatedBilling);
   } catch (e) {
     res.status(409).json({ message: e.message });
   }
