@@ -33,7 +33,6 @@ export const dashboard = async (req, res) => {
       total_balance += bill[i].balance_amount;
     }
 
-    console.log(bill);
     res.status(200).json({
       patients: patients.length,
       patientRequests: patientRequests.length,
