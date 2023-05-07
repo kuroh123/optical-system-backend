@@ -20,14 +20,20 @@ const productSchema = new Schema({
   },
   brand: { type: String },
   description: String,
-  batch_no: { type: String },
+  product_for: { type: String, enum: ["Male", "Female", "Kids"] },
   ordered_quantity: { type: Number, required: true },
-  current_quantity: { type: Number },
-  sold_quantity: { type: Number },
+  current_quantity: {
+    type: Number,
+    default: function () {
+      return this.ordered_quantity;
+    },
+  },
+  // giving default cuz of problem in billing calculation
+  sold_quantity: { type: Number, default: 1 },
+  discount: { type: Number, default: 0 },
+  //
   reorder_level: { type: Number },
   supplier_cost: { type: Number },
-  vat_applicable: { type: Boolean, default: false },
-  vat: { type: Number },
   selling_price: { type: Number, required: true },
 
   created_at: { type: Date, required: true, default: Date.now },
