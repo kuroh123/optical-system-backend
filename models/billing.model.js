@@ -6,22 +6,24 @@ const AutoIncrement = AutoIncrementFactory(mongoose.connection);
 
 const billingSchema = new Schema(
   {
-    lens_name: String,
-    lens_type: String,
-    lens_expiry: Date,
-    lens_for: String,
-    lens_side: String,
-    lens_price: Number,
-    frame_name: String,
-    frame_type: String,
-    frame_price: String,
-    other_items: [Object],
+    product_details: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        sold_quantity: { type: Number, default: 0 },
+      },
+    ],
     extra_charges: Number,
     vat: {
       type: Number,
       default: 0,
     },
+    discount: { type: Number, default: 0 },
     total_amount: Number,
+    grand_total: Number,
+    payment_type: { type: String, enum: ["Cash", "Visa"] },
     paid_amount: Number,
     balance_amount: Number,
     payment_status: {

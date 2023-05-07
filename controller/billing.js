@@ -1,4 +1,6 @@
 import Billing from "../models/billing.model.js";
+import Patient from "../models/patient.model.js";
+import Product from "../models/product.model.js";
 
 export const fetchBillings = async (req, res) => {
   const startDate = req.query.startDate.split(" ");
@@ -9,9 +11,9 @@ export const fetchBillings = async (req, res) => {
         $gte: startDate[0],
         $lte: endDate[0],
       },
-    }).populate({
-      path: "patient",
-    });
+    })
+      .populate("patient")
+      .populate("product_details.product");
     res.status(200).json(billings);
   } catch (e) {
     res.status(404).json({ message: e.message });
@@ -19,12 +21,45 @@ export const fetchBillings = async (req, res) => {
 };
 
 export const createBilling = async (req, res) => {
+  // console.log(req.body);
   const newBilling = new Billing({ ...req.body });
   try {
     await newBilling.save();
     if (newBilling.paid_amount === 0) {
       newBilling.payment_status = "pending";
-    } else if (newBilling.paid_amount < newBilling.total_amount) {
+    } else if (newBilling.paid_amount < newBilling.grand_total) {
+      newBilling.payment_status = "partially_paid";
+    } else {
+      newBilling.payment_status = "paid";
+    }
+    await newBilling.save();
+    res.status(201).json(newBilling);
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const createDirectBilling = async (req, res) => {
+  // console.log(req.body);
+  const newPatient = new Patient({ ...req.body.patientData });
+  try {
+    const savedPatient = await newPatient.save();
+    const newBilling = new Billing({
+      ...req.body.billData,
+      patient: savedPatient._id,
+    });
+
+    await newBilling.save();
+    for (const elem of newBilling.product_details) {
+      console.log(elem);
+      const existingProduct = await Product.findOne({ _id: elem.product });
+      console.log(existingProduct);
+      existingProduct.current_quantity - elem.sold_quantity;
+      await existingProduct.updateOne();
+    }
+    if (newBilling.paid_amount === 0) {
+      newBilling.payment_status = "pending";
+    } else if (newBilling.paid_amount < newBilling.grand_total) {
       newBilling.payment_status = "partially_paid";
     } else {
       newBilling.payment_status = "paid";
@@ -55,7 +90,7 @@ export const updateBilling = async (req, res) => {
     // await updatedPatient.save();
     if (updatedBilling.paid_amount === 0) {
       updatedBilling.payment_status = "pending";
-    } else if (updatedBilling.paid_amount < updatedBilling.total_amount) {
+    } else if (updatedBilling.paid_amount < updatedBilling.grand_total) {
       updatedBilling.payment_status = "partially_paid";
     } else {
       updatedBilling.payment_status = "paid";
