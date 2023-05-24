@@ -54,8 +54,12 @@ export const createDirectBilling = async (req, res) => {
       console.log(elem);
       const existingProduct = await Product.findOne({ _id: elem.product });
       console.log(existingProduct);
-      existingProduct.current_quantity - elem.sold_quantity;
-      await existingProduct.updateOne();
+      const currentQuantity =
+        existingProduct.current_quantity - elem.sold_quantity;
+      await Product.updateOne(
+        { _id: elem.product },
+        { current_quantity: currentQuantity }
+      );
     }
     if (newBilling.paid_amount === 0) {
       newBilling.payment_status = "pending";
