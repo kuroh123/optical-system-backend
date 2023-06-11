@@ -13,10 +13,10 @@ export const users = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-  const { email, password, location } = req.body;
+  const { email, password } = req.body;
   try {
     const hashedPass = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPass, location });
+    const newUser = new User({ email, password: hashedPass });
     await newUser.save();
     res.status(201).json(newUser);
   } catch (e) {
@@ -27,7 +27,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await User.findOne({ email: username });
+    const user = await User.findOne({ email: username }).populate("location");
     if (user) {
       const authenticated = await bcrypt.compare(password, user.password);
       if (authenticated) {

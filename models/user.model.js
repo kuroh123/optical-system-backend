@@ -13,7 +13,10 @@ const userSchema = new Schema(
       required: [true, "Please provide a password!"],
       unique: false,
     },
-    location: String,
+    location: {
+      type: Schema.Types.ObjectId,
+      ref: "Location",
+    },
   },
   { timestamp: true }
 );

@@ -27,6 +27,7 @@ import patientRoutes from "./routes/patients.js";
 import patientRequestRoutes from "./routes/patientRequest.js";
 import billingRoutes from "./routes/billing.js";
 import productRoutes from "./routes/product.js";
+import locationRoutes from "./routes/location.js";
 
 app.use("/api/", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
@@ -34,6 +35,7 @@ app.use("/api/patients", patientRoutes);
 app.use("/api/patientrequest", patientRequestRoutes);
 app.use("/api/billing", billingRoutes);
 app.use("/api/product", productRoutes);
+app.use("/api/locations", locationRoutes);
 
 app.listen(port, () => {
   console.log(`server is running`);

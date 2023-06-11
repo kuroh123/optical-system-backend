@@ -4,13 +4,14 @@ import Product from "../models/product.model.js";
 export const products = async (req, res) => {
   const startDate = req.query.startDate?.split(" ");
   const endDate = req.query.endDate?.split(" ");
+  const { location } = req.query;
   try {
-    const products = await Product.find({
-      // created_at: {
-      //   $gte: startDate[0],
-      //   $lte: endDate[0],
-      // },
-    });
+    let products;
+    if (location) {
+      products = await Product.find({ location: location });
+    } else {
+      products = await Product.find({});
+    }
     res.status(200).json(products);
   } catch (e) {
     res.status(404).json({ message: e.message });
@@ -18,7 +19,13 @@ export const products = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const newProduct = new Product({ ...req.body });
+  const { location } = req.query;
+  let newProduct;
+  if (location) {
+    newProduct = new Product({ ...req.body, location: location });
+  } else {
+    newProduct = new Product({ ...req.body });
+  }
   try {
     await newProduct.save();
     res.status(201).json(newProduct);
