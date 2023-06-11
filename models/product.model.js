@@ -12,6 +12,7 @@ const productSchema = new Schema({
     enum: [
       "lens",
       "frame",
+      "sunglasses",
       "contanct lens",
       "cleaning solution",
       "accessories",
@@ -35,6 +36,10 @@ const productSchema = new Schema({
   reorder_level: { type: Number },
   supplier_cost: { type: Number },
   selling_price: { type: Number, required: true },
+  location: {
+    type: Schema.Types.ObjectId,
+    ref: "Location",
+  },
 
   created_at: { type: Date, required: true, default: Date.now },
 });

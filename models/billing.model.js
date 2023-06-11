@@ -35,6 +35,10 @@ const billingSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Patient",
     },
+    location: {
+      type: Schema.Types.ObjectId,
+      ref: "Location",
+    },
     created_at: { type: Date, required: true, default: Date.now },
   },
   { timestamp: true }
