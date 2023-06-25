@@ -21,7 +21,7 @@ const productSchema = new Schema({
   },
   brand: { type: String },
   description: String,
-  product_for: { type: String, enum: ["Male", "Female", "Kids"] },
+  product_for: { type: String, enum: ["Male", "Female", "Both", "Kids"] },
   ordered_quantity: { type: Number, required: true },
   current_quantity: {
     type: Number,
