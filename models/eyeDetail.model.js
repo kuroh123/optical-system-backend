@@ -4,7 +4,7 @@ import AutoIncrementFactory from "mongoose-sequence";
 
 const AutoIncrement = AutoIncrementFactory(mongoose.connection);
 
-const patientRequestSchema = new Schema(
+const eyeDetailSchema = new Schema(
   {
     right_eye: {
       spherical: String,
@@ -31,15 +31,15 @@ const patientRequestSchema = new Schema(
   { timestamp: true }
 );
 
-// patientRequestSchema.virtual("patient_data", {
+// eyeDetailSchema.virtual("patient_data", {
 //   ref: "Patient",
 //   localField: "patient", // Of post collection
 //   foreignField: "_id", // Of user collection
 //   justOne: true,
 // });
 
-patientRequestSchema.plugin(AutoIncrement, { inc_field: "prescription_no" });
-// patientRequestSchema.pre('save', function(next) {
+// eyeDetailSchema.plugin(AutoIncrement, { inc_field: "prescription_no" });
+// eyeDetailSchema.pre('save', function(next) {
 //     var doc = this;
 //     counter.findByIdAndUpdate({_id: 'entityId'}, {$inc: { seq: 1} }, function(error, counter)   {
 //         if(error)
@@ -49,6 +49,6 @@ patientRequestSchema.plugin(AutoIncrement, { inc_field: "prescription_no" });
 //     });
 // });
 
-const PatientRequest = mongoose.model("PatientRequest", patientRequestSchema);
+const EyeDetail = mongoose.model("EyeDetail", eyeDetailSchema);
 
-export default PatientRequest;
+export default EyeDetail;

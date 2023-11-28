@@ -5,7 +5,9 @@ import User from "../models/user.model.js";
 
 export const users = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).populate({
+      path: "location",
+    });
     res.status(200).json(users);
   } catch (e) {
     res.status(404).json({ message: e.message });
@@ -13,14 +15,57 @@ export const users = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password, isAdmin, location } = req.body;
   try {
     const hashedPass = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPass });
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPass,
+      isAdmin,
+      location,
+    });
     await newUser.save();
     res.status(201).json(newUser);
   } catch (e) {
     res.status(500).json({ message: e.message });
+  }
+};
+
+export const fetchUser = async (req, res) => {
+  const fetchedUser = await User.findById(req.params.id);
+  try {
+    if (fetchUser) {
+      res.status(200).json(fetchedUser);
+    }
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, location } = req.body;
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, {
+      name,
+      email,
+      location,
+    });
+    res.status(201).json(updatedUser);
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user.isAdmin) {
+    await User.deleteOne(user);
+    res.send(true);
+  } else {
+    res.status(401).json({ message: "Not Authorized" });
   }
 };
 

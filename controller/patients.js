@@ -2,15 +2,8 @@ import moment from "moment/moment.js";
 import Patient from "../models/patient.model.js";
 
 export const patients = async (req, res) => {
-  const startDate = req.query.startDate.split(" ");
-  const endDate = req.query.endDate.split(" ");
   try {
-    const patients = await Patient.find({
-      created_at: {
-        $gte: startDate[0],
-        $lte: endDate[0],
-      },
-    });
+    const patients = await Patient.find().sort({ created_at: -1 }).exec();
     res.status(200).json(patients);
   } catch (e) {
     res.status(404).json({ message: e.message });

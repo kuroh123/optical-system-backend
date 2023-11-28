@@ -3,18 +3,13 @@ import Patient from "../models/patient.model.js";
 import Product from "../models/product.model.js";
 
 export const fetchBillings = async (req, res) => {
-  const startDate = req.query.startDate.split(" ");
-  const endDate = req.query.endDate.split(" ");
   try {
-    const billings = await Billing.find({
-      created_at: {
-        $gte: startDate[0],
-        $lte: endDate[0],
-      },
-    })
+    const billings = await Billing.find()
       .populate("patient")
-      .populate("product_details.product");
-    res.status(200).json(billings);
+      .populate("product_details.product")
+      .sort({ created_at: -1 })
+      .exec();
+    res.json(billings);
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
