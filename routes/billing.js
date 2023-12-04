@@ -2,23 +2,29 @@ import authMiddleware from "../middleware/auth.js";
 import express from "express";
 import {
   fetchBilling,
-  createBilling,
   createDirectBilling,
   deleteBilling,
   fetchBillings,
-  updateBilling,
+  fetchTransactions,
+  createTransaction,
+  deleteTransaction,
 } from "../controller/billing.js";
 const router = express.Router();
 
 // router.route("/").get(users);
 router.get("/", authMiddleware, fetchBillings);
-router.post("/", authMiddleware, createBilling);
 router.post("/direct/", authMiddleware, createDirectBilling);
+
+router
+  .route("/transactions")
+  .get(authMiddleware, fetchTransactions)
+  .post(authMiddleware, createTransaction);
 
 router
   .route("/:id")
   .get(authMiddleware, fetchBilling)
-  .put(authMiddleware, updateBilling)
   .delete(authMiddleware, deleteBilling);
+
+router.delete("/transactions/:id", authMiddleware, deleteTransaction);
 
 export default router;
