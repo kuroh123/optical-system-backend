@@ -1,16 +1,10 @@
 import moment from "moment/moment.js";
 import Patient from "../models/patient.model.js";
+import CustomerOrder from "../models/customerOrder.model.js";
 
 export const patients = async (req, res) => {
-  const startDate = req.query.startDate.split(" ");
-  const endDate = req.query.endDate.split(" ");
   try {
-    const patients = await Patient.find({
-      created_at: {
-        $gte: startDate[0],
-        $lte: endDate[0],
-      },
-    });
+    const patients = await Patient.find().sort({ created_at: -1 }).exec();
     res.status(200).json(patients);
   } catch (e) {
     res.status(404).json({ message: e.message });
@@ -56,4 +50,40 @@ export const deletePatient = async (req, res) => {
   await Patient.deleteOne(patient);
   // const patient = await Patient.remove(id);
   res.send(true);
+};
+
+export const customerOrders = async (req, res) => {
+  try {
+    const customerOrders = await CustomerOrder.find()
+      .populate("billing")
+      .sort({ created_at: -1 })
+      .exec();
+    res.status(200).json(customerOrders);
+  } catch (e) {
+    res.status(404).json({ message: e.message });
+  }
+};
+
+export const fetchCustomerOrder = async (req, res) => {
+  const fetchedCustomerOrder = await CustomerOrder.findById(req.params.id);
+  try {
+    if (fetchedCustomerOrder) {
+      res.status(200).json(fetchedCustomerOrder);
+    }
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
+};
+
+export const updateCustomerOrder = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedCustomerOrder = await CustomerOrder.findByIdAndUpdate(id, {
+      ...req.body,
+    });
+    res.status(201).json(updatedCustomerOrder);
+  } catch (e) {
+    res.status(409).json({ message: e.message });
+  }
 };

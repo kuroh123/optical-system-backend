@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Billing from "./billing.model.js";
-import PatientRequest from "./patientRequest.model.js";
+import PatientRequest from "./eyeDetail.model.js";
 
 const Schema = mongoose.Schema;
 

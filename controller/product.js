@@ -8,7 +8,7 @@ export const products = async (req, res) => {
   try {
     let products;
     if (location) {
-      products = await Product.find({ location: location });
+      products = await Product.find().sort({ created_at: -1 }).exec();
     } else {
       products = await Product.find({});
     }

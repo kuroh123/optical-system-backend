@@ -1,29 +1,12 @@
 import Billing from "../models/billing.model.js";
 import Patient from "../models/patient.model.js";
-import PatientRequest from "../models/patientRequest.model.js";
+// import PatientRequest from "../models/eyeDetail.model.js";
 
 export const dashboard = async (req, res) => {
-  const startDate = req.query.startDate.split(" ");
-  const endDate = req.query.endDate.split(" ");
   try {
-    const patients = await Patient.find({
-      created_at: {
-        $gte: startDate[0],
-        $lte: endDate[0],
-      },
-    });
-    const patientRequests = await PatientRequest.find({
-      created_at: {
-        $gte: startDate[0],
-        $lte: endDate[0],
-      },
-    });
-    const bill = await Billing.find({
-      created_at: {
-        $gte: startDate[0],
-        $lte: endDate[0],
-      },
-    });
+    const patients = await Patient.find({});
+    // const patientRequests = await PatientRequest.find({});
+    const bill = await Billing.find({});
     let total_revenue = 0;
     let total_vat = 0;
     let total_balance = 0;
@@ -35,7 +18,7 @@ export const dashboard = async (req, res) => {
 
     res.status(200).json({
       patients: patients.length,
-      patientRequests: patientRequests.length,
+      // patientRequests: patientRequests.length,
       bill: bill.length,
       total_revenue,
       total_vat,

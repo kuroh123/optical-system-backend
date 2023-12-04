@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 import AutoIncrementFactory from "mongoose-sequence";
 
-const AutoIncrement = AutoIncrementFactory(mongoose.connection);
+// const AutoIncrement = AutoIncrementFactory(mongoose.connection);
 
 const productSchema = new Schema({
   product_code: String,
@@ -30,9 +30,8 @@ const productSchema = new Schema({
     },
   },
   // giving default cuz of problem in billing calculation
-  sold_quantity: { type: Number, default: 1 },
+  // sold_quantity: { type: Number, default: 1 },
   discount: { type: Number, default: 0 },
-  //
   reorder_level: { type: Number },
   supplier_cost: { type: Number },
   selling_price: { type: Number, required: true },
@@ -44,7 +43,7 @@ const productSchema = new Schema({
   created_at: { type: Date, required: true, default: Date.now },
 });
 
-productSchema.plugin(AutoIncrement, { inc_field: "product_no" });
+// productSchema.plugin(AutoIncrement, { inc_field: "product_no" });
 
 const Product = mongoose.model("Product", productSchema);
 
