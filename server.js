@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, dbName: "localOptSys" });
+mongoose.connect(uri, { useNewUrlParser: true, dbName: process.env.DB_NAME });
 mongoose.set("strictQuery", true);
 const connection = mongoose.connection;
 connection.once("open", () => {
