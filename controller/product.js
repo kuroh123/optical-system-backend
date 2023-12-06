@@ -6,12 +6,9 @@ export const products = async (req, res) => {
   const endDate = req.query.endDate?.split(" ");
   const { location } = req.query;
   try {
-    let products;
-    if (location) {
-      products = await Product.find().sort({ created_at: -1 }).exec();
-    } else {
-      products = await Product.find({});
-    }
+    const products = await Product.find({ location })
+      .sort({ created_at: -1 })
+      .exec();
     res.status(200).json(products);
   } catch (e) {
     res.status(404).json({ message: e.message });

@@ -5,8 +5,10 @@ import Product from "../models/product.model.js";
 import Transaction from "../models/transactions.model.js";
 
 export const fetchBillings = async (req, res) => {
+  const { location } = req.query;
+
   try {
-    const billings = await Billing.find()
+    const billings = await Billing.find({ location })
       .populate("patient")
       .populate("products.product")
       .populate("customer_orders")
