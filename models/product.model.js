@@ -39,7 +39,10 @@ const productSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Location",
   },
-
+  isArchive: {
+    type: Boolean,
+    default: false
+  },
   created_at: { type: Date, required: true, default: Date.now },
 });
 

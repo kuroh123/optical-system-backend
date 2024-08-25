@@ -85,7 +85,7 @@ export const createDirectBilling = async (req, res) => {
     await savedBilling.updateOne({ customer_orders: savedCustomerOrderIds });
     res.status(201).json(savedBilling);
   } catch (e) {
-    res.status(409).json({ message: e.message });
+    res.status(400).json({ message: e.message });
   }
 };
 
@@ -96,7 +96,7 @@ export const fetchBilling = async (req, res) => {
       res.status(200).json(fetchedBilling);
     }
   } catch (e) {
-    res.status(409).json({ message: e.message });
+    res.status(400).json({ message: e.message });
   }
 };
 
@@ -135,7 +135,7 @@ export const fetchTransactions = async (req, res) => {
       .exec();
     res.json(transactions);
   } catch (e) {
-    res.status(404).json({ message: e.message });
+    res.status(500).json({ message: e.message });
   }
 };
 
@@ -145,7 +145,7 @@ export const createTransaction = async (req, res) => {
     await newTransaction.save();
     res.status(201).json(newTransaction);
   } catch (e) {
-    res.status(409).json({ message: e.message });
+    res.status(400).json({ message: e.message });
   }
 };
 

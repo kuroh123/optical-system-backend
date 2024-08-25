@@ -6,9 +6,19 @@ export const products = async (req, res) => {
   const endDate = req.query.endDate?.split(" ");
   const { location } = req.query;
   try {
-    const products = await Product.find({ location })
-      .sort({ created_at: -1 })
+    const products = await Product.find({
+      location: location,
+      current_quantity: { $gt: 0 },
+    })
+      .sort({ created_at: 1 })
       .exec();
+
+    // for (let product of products) {
+    //   if (product.current_quantity === 0 && !product.isArchive) {
+    //     product.isArchive = true; // Set archive to true
+    //     await product.save(); // Save the updated product
+    //   }
+    // }
     res.status(200).json(products);
   } catch (e) {
     res.status(404).json({ message: e.message });

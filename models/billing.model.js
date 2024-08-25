@@ -7,6 +7,7 @@ const AutoIncrement = AutoIncrementFactory(mongoose.connection);
 
 const billingSchema = new Schema(
   {
+    file_no: { type: String },
     products: [
       {
         product: {
