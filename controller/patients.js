@@ -3,9 +3,17 @@ import Patient from "../models/patient.model.js";
 import CustomerOrder from "../models/customerOrder.model.js";
 
 export const patients = async (req, res) => {
+  let { page, perPage } = req.query;
+  page = parseInt(page) || 1;
+  perPage = parseInt(perPage) || 10;
   try {
-    const patients = await Patient.find().sort({ created_at: -1 }).exec();
-    res.status(200).json(patients);
+    const patients = await Patient.find()
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ created_at: -1 })
+      .exec();
+    const totalRows = await Patient.countDocuments();
+    res.status(200).json({ patients, totalRows });
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
@@ -23,6 +31,7 @@ export const createPatient = async (req, res) => {
 
 export const fetchPatient = async (req, res) => {
   const fetchedPatient = await Patient.findById(req.params.id);
+
   try {
     if (fetchedPatient) {
       res.status(200).json(fetchedPatient);
