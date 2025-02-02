@@ -6,16 +6,21 @@ import Transaction from "../models/transactions.model.js";
 
 export const fetchBillings = async (req, res) => {
   const { location } = req.query;
-
+  let { page, perPage } = req.query;
+  page = parseInt(page) || 1;
+  perPage = parseInt(perPage) || 10;
   try {
     const billings = await Billing.find({ location })
+      .skip((page - 1) * perPage)
+      .limit(perPage)
       .populate("patient")
       .populate("products.product")
       .populate("customer_orders")
       .populate("transactions")
       .sort({ created_at: -1 })
       .exec();
-    res.json(billings);
+    const totalRows = await Billing.find({ location }).countDocuments();
+    res.json({ billings, totalRows });
   } catch (e) {
     res.status(404).json({ message: e.message });
   }
