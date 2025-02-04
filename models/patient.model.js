@@ -12,6 +12,7 @@ const patientSchema = new Schema(
     address: String,
     dob: Date,
     age: Number,
+    email: String,
     gender: String,
     examined_by: String,
     created_at: { type: Date, required: true, default: Date.now },
